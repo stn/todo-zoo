@@ -1,8 +1,9 @@
-import React, {useContext, useState} from 'react';
-import {AddTaskContext} from "../TasksContext";
+import React, {useState} from 'react';
+
+import {useAddTask} from '../TasksContext';
 
 function Form(props) {
-  const addTask = useContext(AddTaskContext);
+  const addTask = useAddTask();
   const [name, setName] = useState('');
 
   function handleChange(e) {

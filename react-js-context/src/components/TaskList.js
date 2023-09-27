@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-import FilterButton from "./FilterButton";
-import TaskListHeading from "./TaskListHeading";
-import Todo from "./Todo";
-import {usePrevious} from "../hooks";
-import {TasksContext} from "../TasksContext";
+import FilterButton from './FilterButton';
+import TaskListHeading from './TaskListHeading';
+import Todo from './Todo';
+import {usePrevious} from '../hooks';
+import {useTasks} from '../TasksContext';
 
 const FILTER_MAP = {
   All: () => true,
@@ -15,7 +15,7 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function TaskList(props) {
-  const tasks = useContext(TasksContext);
+  const tasks = useTasks();
   const [filter, setFilter] = useState('All');
 
   const taskList = tasks
