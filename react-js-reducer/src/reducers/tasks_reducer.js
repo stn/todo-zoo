@@ -1,4 +1,4 @@
-// Tasks Reducer
+import {nanoid} from 'nanoid';
 
 function tasksReducer(tasks, action) {
   switch (action.type) {
