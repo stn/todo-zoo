@@ -1,8 +1,10 @@
-import React, {useDeferredValue, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import FilterButton from "./FilterButton";
 import TaskListHeading from "./TaskListHeading";
 import Todo from "./Todo";
+
+import {usePrevious} from "../hooks";
 
 const FILTER_MAP = {
   All: () => true,
@@ -39,7 +41,7 @@ function TaskList(props) {
   ));
 
   const listHeadingRef = useRef(null);
-  const prevTaskLength = useDeferredValue(props.tasks.length);
+  const prevTaskLength = usePrevious(props.tasks.length);
 
   useEffect(() => {
     if (props.tasks.length - prevTaskLength === -1) {

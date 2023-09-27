@@ -1,10 +1,12 @@
-import React, {useDeferredValue, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+
+import {usePrevious} from "../hooks";
 
 export default function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
 
-  const wasEditing = useDeferredValue(isEditing);
+  const wasEditing = usePrevious(isEditing);
 
   const editFieldRef = useRef(null);
   const editButtonRef = useRef(null);
