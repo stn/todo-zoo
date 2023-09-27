@@ -1,45 +1,39 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {nanoid} from 'nanoid';
+import React, {useReducer} from 'react';
 
 import Form from './components/Form';
 import TaskList from './components/TaskList';
+import tasksReducer from './reducers/tasks_reducer';
 
 function App(props) {
-  const [tasks, setTasks] = useState(props.tasks);
+  const [tasks, dispatch] = useReducer(tasksReducer, props.tasks);
 
   function addTask(name) {
-    const newTask = {id: `todo-${nanoid()}`, name, completed: false};
-    setTasks([...tasks, newTask]);
+    dispatch({
+      type: 'add_task',
+      name: name,
+    });
   }
 
   function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        // use object spread to make a new object
-        // whose `completed` prop has been inverted
-        return {...task, completed: !task.completed};
-      }
-      return task;
+    dispatch({
+      type: 'toggle_task_completed',
+      id: id,
     });
-    setTasks(updatedTasks);
   }
 
   function deleteTask(id) {
-    const remainingTasks = tasks.filter((task) => id !== task.id);
-    setTasks(remainingTasks);
+    dispatch({
+      type: 'delete_task',
+      id: id,
+    });
   }
 
   function editTask(id, newName) {
-    const editedTaskList = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        //
-        return {...task, name: newName};
-      }
-      return task;
+    dispatch({
+      type: 'edit_task',
+      id: id,
+      name: newName,
     });
-    setTasks(editedTaskList);
   }
 
   return (
