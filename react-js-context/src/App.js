@@ -3,6 +3,7 @@ import {nanoid} from 'nanoid';
 
 import Form from './components/Form';
 import TaskList from './components/TaskList';
+import {AddTaskContext, DeleteTaskContext, EditTaskContext, TasksContext, ToggleTaskCompletedContext} from "./TasksContext";
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
@@ -45,13 +46,18 @@ function App(props) {
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
-      <Form addTask={addTask}/>
-      <TaskList
-        tasks={tasks}
-        toggleTaskCompleted={toggleTaskCompleted}
-        deleteTask={deleteTask}
-        editTask={editTask}
-      />
+      <TasksContext.Provider value={tasks}>
+        <AddTaskContext.Provider value={addTask}>
+          <ToggleTaskCompletedContext.Provider value={toggleTaskCompleted}>
+            <DeleteTaskContext.Provider value={deleteTask}>
+              <EditTaskContext.Provider value={editTask}>
+                <Form />
+                <TaskList />
+              </EditTaskContext.Provider>
+            </DeleteTaskContext.Provider>
+          </ToggleTaskCompletedContext.Provider>
+        </AddTaskContext.Provider>
+      </TasksContext.Provider>
     </div>
   );
 }

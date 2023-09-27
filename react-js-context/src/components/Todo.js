@@ -1,8 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {usePrevious} from "../hooks";
+import {DeleteTaskContext, EditTaskContext, ToggleTaskCompletedContext} from "../TasksContext";
 
 export default function Todo(props) {
+  const editTask = useContext(EditTaskContext);
+  const deleteTask = useContext(DeleteTaskContext);
+  const toggleTaskCompleted = useContext(ToggleTaskCompletedContext);
+
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
 
@@ -26,7 +31,7 @@ export default function Todo(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.editTask(props.id, newName);
+    editTask(props.id, newName);
     setNewName('');
     setEditing(false);
   }
@@ -70,7 +75,7 @@ export default function Todo(props) {
           id={props.id}
           type="checkbox"
           defaultChecked={props.completed}
-          onChange={() => props.toggleTaskCompleted(props.id)}
+          onChange={() => toggleTaskCompleted(props.id)}
         />
         <label className="todo-label" htmlFor={props.id}>
           {props.name}
@@ -88,7 +93,7 @@ export default function Todo(props) {
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() => props.deleteTask(props.id)}
+          onClick={() => deleteTask(props.id)}
         >
           Delete <span className="visually-hidden">{props.name}</span>
         </button>

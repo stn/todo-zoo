@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
+import {AddTaskContext} from "../TasksContext";
 
 function Form(props) {
+  const addTask = useContext(AddTaskContext);
   const [name, setName] = useState('');
 
   function handleChange(e) {
@@ -12,7 +14,7 @@ function Form(props) {
     if (name === '') {
       return;
     }
-    props.addTask(name);
+    addTask(name);
     setName('');
   }
   return (

@@ -5,7 +5,7 @@ function TaskListHeading({ taskList }) {
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
 
   return (
-    <h2 id="list-heading" tabIndex="-1">
+    <h2 id="list-heading">
       {headingText}
     </h2>
   );
