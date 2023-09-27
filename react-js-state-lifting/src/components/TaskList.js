@@ -1,6 +1,7 @@
 import React, {useDeferredValue, useEffect, useRef, useState} from 'react';
 
 import FilterButton from "./FilterButton";
+import TaskListHeading from "./TaskListHeading";
 import Todo from "./Todo";
 
 const FILTER_MAP = {
@@ -37,9 +38,6 @@ function TaskList(props) {
     />
   ));
 
-  const tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
-  const headingText = `${taskList.length} ${tasksNoun} remaining`;
-
   const listHeadingRef = useRef(null);
   const prevTaskLength = useDeferredValue(props.tasks.length);
 
@@ -52,9 +50,10 @@ function TaskList(props) {
   return (
     <div>
       <div className="filters btn-group stack-exception">{filterList}</div>
-      <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
-        {headingText}
-      </h2>
+      <TaskListHeading
+        taskList={taskList}
+        ref={listHeadingRef}
+      />
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
