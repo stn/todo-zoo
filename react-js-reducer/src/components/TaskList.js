@@ -50,10 +50,9 @@ function TaskList(props) {
   return (
     <div>
       <div className="filters btn-group stack-exception">{filterList}</div>
-      <TaskListHeading
-        taskList={taskList}
-        ref={listHeadingRef}
-      />
+      <div ref={listHeadingRef}>
+        <TaskListHeading taskList={taskList} />
+      </div>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
