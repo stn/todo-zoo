@@ -50,7 +50,7 @@ function TaskList(props) {
   return (
     <div>
       <div className="filters btn-group stack-exception">{filterList}</div>
-      <div ref={listHeadingRef}>
+      <div tabIndex="-1" ref={listHeadingRef}>
         <TaskListHeading taskList={taskList} />
       </div>
       <ul
