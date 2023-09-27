@@ -1,8 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 
 import {usePrevious} from "../hooks";
+import {useTasksDispatch} from "../TasksContext";
 
 export default function Todo(props) {
+  const dispatch = useTasksDispatch();
+
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
 
@@ -26,7 +29,11 @@ export default function Todo(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.editTask(props.id, newName);
+    dispatch({
+      type: 'edit_task',
+      id: props.id,
+      name: newName,
+    });
     setNewName('');
     setEditing(false);
   }
@@ -70,7 +77,12 @@ export default function Todo(props) {
           id={props.id}
           type="checkbox"
           defaultChecked={props.completed}
-          onChange={() => props.toggleTaskCompleted(props.id)}
+          onChange={() =>
+            dispatch({
+              type: 'toggle_task_completed',
+              id: props.id,
+            })
+          }
         />
         <label className="todo-label" htmlFor={props.id}>
           {props.name}
@@ -88,7 +100,12 @@ export default function Todo(props) {
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() => props.deleteTask(props.id)}
+          onClick={() =>
+            dispatch({
+              type: 'delete_task',
+              id: props.id,
+            })
+          }
         >
           Delete <span className="visually-hidden">{props.name}</span>
         </button>

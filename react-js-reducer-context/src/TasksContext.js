@@ -1,4 +1,8 @@
-// Tasks Reducer
+import {createContext, useContext, useReducer} from 'react';
+import {nanoid} from 'nanoid';
+
+export const TasksContext = createContext(null);
+export const TasksDispatchContext = createContext(null);
 
 function tasksReducer(tasks, action) {
   switch (action.type) {
@@ -42,4 +46,22 @@ function tasksReducer(tasks, action) {
   }
 }
 
-export default tasksReducer;
+export function TasksProvider({ initialTasks, children }) {
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+
+  return (
+    <TasksContext.Provider value={tasks}>
+      <TasksDispatchContext.Provider value={dispatch}>
+        {children}
+      </TasksDispatchContext.Provider>
+    </TasksContext.Provider>
+  );
+}
+
+export function useTasks() {
+  return useContext(TasksContext);
+}
+
+export function useTasksDispatch() {
+  return useContext(TasksDispatchContext);
+}

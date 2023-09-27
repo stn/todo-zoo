@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import FilterButton from "./FilterButton";
 import TaskListHeading from "./TaskListHeading";
 import Todo from "./Todo";
 
 import {usePrevious} from "../hooks";
+import {useTasks} from "../TasksContext";
 
 const FILTER_MAP = {
   All: () => true,
@@ -15,9 +16,10 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function TaskList(props) {
+  const tasks = useTasks();
   const [filter, setFilter] = useState('All');
 
-  const taskList = props.tasks
+  const taskList = tasks
     .filter(FILTER_MAP[filter])
     .map((task) => (
       <Todo
@@ -25,9 +27,6 @@ function TaskList(props) {
         name={task.name}
         completed={task.completed}
         key={task.id}
-        toggleTaskCompleted={props.toggleTaskCompleted}
-        deleteTask={props.deleteTask}
-        editTask={props.editTask}
       />
     ));
 
@@ -41,13 +40,13 @@ function TaskList(props) {
   ));
 
   const listHeadingRef = useRef(null);
-  const prevTaskLength = usePrevious(props.tasks.length);
+  const prevTaskLength = usePrevious(tasks.length);
 
   useEffect(() => {
-    if (props.tasks.length - prevTaskLength === -1) {
+    if (tasks.length - prevTaskLength === -1) {
       listHeadingRef.current.focus();
     }
-  }, [props.tasks.length, prevTaskLength]);
+  }, [tasks.length, prevTaskLength]);
 
   return (
     <div>

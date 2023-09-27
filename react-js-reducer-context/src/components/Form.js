@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
+import {useTasksDispatch} from "../TasksContext";
+
 function Form(props) {
+  const dispatch = useTasksDispatch();
   const [name, setName] = useState('');
 
   function handleChange(e) {
@@ -12,7 +15,10 @@ function Form(props) {
     if (name === '') {
       return;
     }
-    props.addTask(name);
+    dispatch({
+      type: 'add_task',
+      name: name,
+    });
     setName('');
   }
   return (
