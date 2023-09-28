@@ -21,19 +21,16 @@ function TaskList(props) {
 
   const [filter, setFilter] = useState('All');
   const filteredAtoms = useAtomValue(useMemo(() => atom(
-    (get) => {
-      return taskAtoms.filter((taskAtom) => FILTER_MAP[filter](get(taskAtom)));
-    }),
+    (get) =>
+      taskAtoms
+        .filter((taskAtom) => FILTER_MAP[filter](get(taskAtom)))
+        .map((taskAtom) => [get(taskAtom).id, taskAtom])
+    ),
     [taskAtoms, filter]
   ));
-  const ids = useAtomValue(useMemo(() => atom(
-    (get) => {
-      return filteredAtoms.map((a) => get(a).id);
-    }
-  ), [filteredAtoms]));
 
   const taskList = filteredAtoms
-    .map((taskAtom, i) => {
+    .map(([id, taskAtom]) => {
       return (
         <Todo
           task={taskAtom}
@@ -41,7 +38,7 @@ function TaskList(props) {
             type: 'remove',
             atom: taskAtom,
           })}
-          key={ids[i]}
+          key={id}
         />
       );
     });
