@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
+import {useSetAtom} from 'jotai';
+import {nanoid} from 'nanoid';
 
-import {useAddTask} from '../TasksContext';
+import {tasksAtom} from '../tasks';
 
 function Form(props) {
-  const addTask = useAddTask();
+  const setTasks = useSetAtom(tasksAtom);
   const [name, setName] = useState('');
 
   function handleChange(e) {
@@ -15,7 +17,8 @@ function Form(props) {
     if (name === '') {
       return;
     }
-    addTask(name);
+    const newTask = {id: `todo-${nanoid()}`, name, completed: false};
+    setTasks((prev) => [...prev, newTask]);
     setName('');
   }
   return (

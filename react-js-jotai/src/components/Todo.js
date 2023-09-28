@@ -1,12 +1,10 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {useAtom} from 'jotai';
 
 import {usePrevious} from '../hooks';
-import {useDeleteTask, useEditTask, useToggleTaskCompleted} from '../TasksContext';
 
 export default function Todo(props) {
-  const editTask = useEditTask();
-  const deleteTask = useDeleteTask();
-  const toggleTaskCompleted = useToggleTaskCompleted();
+  const [task, setTask] = useAtom(props.task)
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
@@ -31,7 +29,7 @@ export default function Todo(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    editTask(props.id, newName);
+    setTask((prev) => ({...prev, name: newName}));
     setNewName('');
     setEditing(false);
   }
@@ -39,11 +37,11 @@ export default function Todo(props) {
   const editingTemplate = (
     <form className="stack-small" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label className="todo-label" htmlFor={props.id}>
-          New name for {props.name}
+        <label className="todo-label" htmlFor={task.id}>
+          New name for {task.name}
         </label>
         <input
-          id={props.id}
+          id={task.id}
           className="todo-text"
           type="text"
           value={newName}
@@ -58,11 +56,11 @@ export default function Todo(props) {
           onClick={() => setEditing(false)}
         >
           Cancel
-          <span className="visually-hidden">renaming {props.name}</span>
+          <span className="visually-hidden">renaming {task.name}</span>
         </button>
         <button type="submit" className="btn btn__primary todo-edit">
           Save
-          <span className="visually-hidden">new name for {props.name}</span>
+          <span className="visually-hidden">new name for {task.name}</span>
         </button>
       </div>
     </form>
@@ -72,13 +70,15 @@ export default function Todo(props) {
     <div className="stack-small">
       <div className="c-cb">
         <input
-          id={props.id}
+          id={task.id}
           type="checkbox"
-          defaultChecked={props.completed}
-          onChange={() => toggleTaskCompleted(props.id)}
+          defaultChecked={task.completed}
+          onChange={() => {
+            setTask((prev) => ({...prev, completed: !prev.completed}));
+          }}
         />
-        <label className="todo-label" htmlFor={props.id}>
-          {props.name}
+        <label className="todo-label" htmlFor={task.id}>
+          {task.name}
         </label>
       </div>
       <div className="btn-group">
@@ -88,14 +88,14 @@ export default function Todo(props) {
           onClick={() => setEditing(true)}
           ref={editButtonRef}
         >
-          Edit <span className="visually-hidden">{props.name}</span>
+          Edit <span className="visually-hidden">{task.name}</span>
         </button>
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() => deleteTask(props.id)}
+          onClick={() => props.remove(props.task)}
         >
-          Delete <span className="visually-hidden">{props.name}</span>
+          Delete <span className="visually-hidden">{task.name}</span>
         </button>
       </div>
     </div>

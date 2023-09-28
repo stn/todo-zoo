@@ -1,10 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {atom, useAtom, useAtomValue} from 'jotai';
+
+import {taskAtomsAtom} from '../tasks';
+import {usePrevious} from '../hooks';
 
 import FilterButton from './FilterButton';
 import TaskListHeading from './TaskListHeading';
 import Todo from './Todo';
-import {usePrevious} from '../hooks';
-import {useTasks} from '../TasksContext';
 
 const FILTER_MAP = {
   All: () => true,
@@ -15,19 +17,34 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function TaskList(props) {
-  const tasks = useTasks();
-  const [filter, setFilter] = useState('All');
+  const [taskAtoms, dispatch] = useAtom(taskAtomsAtom);
 
-  const taskList = tasks
-    .filter(FILTER_MAP[filter])
-    .map((task) => (
-      <Todo
-        id={task.id}
-        name={task.name}
-        completed={task.completed}
-        key={task.id}
-      />
-    ));
+  const [filter, setFilter] = useState('All');
+  const filteredAtoms = useAtomValue(useMemo(() => atom(
+    (get) => {
+      return taskAtoms.filter((taskAtom) => FILTER_MAP[filter](get(taskAtom)));
+    }),
+    [taskAtoms, filter]
+  ));
+  const ids = useAtomValue(useMemo(() => atom(
+    (get) => {
+      return filteredAtoms.map((a) => get(a).id);
+    }
+  ), [filteredAtoms]));
+
+  const taskList = filteredAtoms
+    .map((taskAtom, i) => {
+      return (
+        <Todo
+          task={taskAtom}
+          remove={() => dispatch({
+            type: 'remove',
+            atom: taskAtom,
+          })}
+          key={ids[i]}
+        />
+      );
+    });
 
   const filterList = FILTER_NAMES.map((name) => (
     <FilterButton
@@ -39,13 +56,13 @@ function TaskList(props) {
   ));
 
   const listHeadingRef = useRef(null);
-  const prevTaskLength = usePrevious(tasks.length);
+  const prevTaskLength = usePrevious(filteredAtoms.length);
 
   useEffect(() => {
-    if (tasks.length - prevTaskLength === -1) {
+    if (filteredAtoms.length - prevTaskLength === -1) {
       listHeadingRef.current.focus();
     }
-  }, [tasks.length, prevTaskLength]);
+  }, [filteredAtoms.length, prevTaskLength]);
 
   return (
     <div>
