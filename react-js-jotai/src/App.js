@@ -1,5 +1,5 @@
 import React from 'react';
-import {Provider} from "jotai/react/Provider";
+import {Provider} from 'jotai';
 
 import Form from './components/Form';
 import TaskList from './components/TaskList';
