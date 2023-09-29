@@ -4,7 +4,7 @@ import FilterButton from './FilterButton';
 import TaskListHeading from './TaskListHeading';
 import Todo from './Todo';
 import {usePrevious} from '../hooks';
-import {useTasks} from '../TasksContext';
+import {useTasksStore} from '../store';
 
 const FILTER_MAP = {
   All: () => true,
@@ -15,7 +15,7 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function TaskList(props) {
-  const tasks = useTasks();
+  const tasks = useTasksStore((store) => store.tasks);
   const [filter, setFilter] = useState('All');
 
   const taskList = tasks

@@ -1,12 +1,12 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {usePrevious} from '../hooks';
-import {useDeleteTask, useEditTask, useToggleTaskCompleted} from '../TasksContext';
+import {useTasksStore} from '../store';
 
 export default function Todo(props) {
-  const editTask = useEditTask();
-  const deleteTask = useDeleteTask();
-  const toggleTaskCompleted = useToggleTaskCompleted();
+  const editTask = useTasksStore((store) => store.editTask);
+  const deleteTask = useTasksStore((store) => store.deleteTask);
+  const toggleTaskCompleted = useTasksStore((store) => store.toggleTaskCompleted);
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
