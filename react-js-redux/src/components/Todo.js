@@ -1,10 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import {usePrevious} from "../hooks";
-import {useTasksDispatch} from "../TasksContext";
+import {editTask, deleteTask, toggleTaskCompleted} from '../features/tasks/tasksSlice';
 
 export default function Todo(props) {
-  const dispatch = useTasksDispatch();
+  const dispatch = useDispatch();
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
@@ -29,11 +30,10 @@ export default function Todo(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch({
-      type: 'edit_task',
+    dispatch(editTask({
       id: props.id,
       name: newName,
-    });
+    }));
     setNewName('');
     setEditing(false);
   }
@@ -77,12 +77,7 @@ export default function Todo(props) {
           id={props.id}
           type="checkbox"
           defaultChecked={props.completed}
-          onChange={() =>
-            dispatch({
-              type: 'toggle_task_completed',
-              id: props.id,
-            })
-          }
+          onChange={() => dispatch(toggleTaskCompleted(props.id))}
         />
         <label className="todo-label" htmlFor={props.id}>
           {props.name}
@@ -100,12 +95,7 @@ export default function Todo(props) {
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() =>
-            dispatch({
-              type: 'delete_task',
-              id: props.id,
-            })
-          }
+          onClick={() => dispatch(deleteTask(props.id))}
         >
           Delete <span className="visually-hidden">{props.name}</span>
         </button>

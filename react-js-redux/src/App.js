@@ -1,17 +1,18 @@
 import React from 'react';
+import {Provider} from 'react-redux';
 
 import Form from './components/Form';
 import TaskList from './components/TaskList';
-import {TasksProvider} from "./TasksContext";
+import {store} from './store'
 
 function App(props) {
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
-      <TasksProvider initialTasks={props.tasks}>
+      <Provider store={store}>
         <Form />
         <TaskList />
-      </TasksProvider>
+      </Provider>
     </div>
   );
 }

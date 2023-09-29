@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import {useDispatch} from 'react-redux';
 
-import {useTasksDispatch} from "../TasksContext";
+import {addTask} from '../features/tasks/tasksSlice';
+
 
 function Form(props) {
-  const dispatch = useTasksDispatch();
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
 
   function handleChange(e) {
@@ -15,10 +17,7 @@ function Form(props) {
     if (name === '') {
       return;
     }
-    dispatch({
-      type: 'add_task',
-      name: name,
-    });
+    dispatch(addTask(name));
     setName('');
   }
   return (

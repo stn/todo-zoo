@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import FilterButton from "./FilterButton";
 import TaskListHeading from "./TaskListHeading";
 import Todo from "./Todo";
 
 import {usePrevious} from "../hooks";
-import {useTasks} from "../TasksContext";
 
 const FILTER_MAP = {
   All: () => true,
@@ -16,7 +16,7 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function TaskList(props) {
-  const tasks = useTasks();
+  const tasks = useSelector((state) => state.tasks);
   const [filter, setFilter] = useState('All');
 
   const taskList = tasks
