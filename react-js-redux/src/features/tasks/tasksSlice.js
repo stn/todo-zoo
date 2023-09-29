@@ -31,7 +31,6 @@ export const tasksSlice = createSlice({
       }
     },
     editTask: (state, action) => {
-      console.log(action);
       const index = state.findIndex((task) => task.id === action.payload.id);
       if (index !== -1) {
         state[index].name = action.payload.name;
