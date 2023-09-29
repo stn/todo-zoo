@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useAtom} from 'jotai';
+import {useAtom, useSetAtom} from 'jotai';
 
 import {usePrevious} from '../hooks';
+import {deleteTaskAtom} from '../tasks';
 
 export default function Todo(props) {
-  const [task, setTask] = useAtom(props.task)
+  const [task, setTask] = useAtom(props.task);
+  const deleteTask = useSetAtom(deleteTaskAtom);
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState('');
@@ -93,7 +95,7 @@ export default function Todo(props) {
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() => props.remove(props.task)}
+          onClick={() => deleteTask(task.id)}
         >
           Delete <span className="visually-hidden">{task.name}</span>
         </button>

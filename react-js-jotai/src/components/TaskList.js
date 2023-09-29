@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {atom, useAtom, useAtomValue} from 'jotai';
+import React, {useEffect, useRef, useState} from 'react';
+import {atom, useAtomValue} from 'jotai';
 
 import {taskAtomsAtom} from '../tasks';
 import {usePrevious} from '../hooks';
@@ -16,28 +16,28 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-function TaskList(props) {
-  const [taskAtoms, dispatch] = useAtom(taskAtomsAtom);
+function createFilteredAtom(filter) {
+  return atom((get) =>
+    get(taskAtomsAtom)
+      .filter((taskAtom) => FILTER_MAP[filter](get(taskAtom)))
+      .map((taskAtom) => [get(taskAtom).id, taskAtom])
+  );
+}
 
+const FILTERED_MAP =
+  Object.fromEntries(
+    FILTER_NAMES.map((filter) => [filter, createFilteredAtom(filter)])
+  )
+
+function TaskList(props) {
   const [filter, setFilter] = useState('All');
-  const filteredAtoms = useAtomValue(useMemo(() => atom(
-    (get) =>
-      taskAtoms
-        .filter((taskAtom) => FILTER_MAP[filter](get(taskAtom)))
-        .map((taskAtom) => [get(taskAtom).id, taskAtom])
-    ),
-    [taskAtoms, filter]
-  ));
+  const filteredAtoms = useAtomValue(FILTERED_MAP[filter])
 
   const taskList = filteredAtoms
     .map(([id, taskAtom]) => {
       return (
         <Todo
           task={taskAtom}
-          remove={() => dispatch({
-            type: 'remove',
-            atom: taskAtom,
-          })}
           key={id}
         />
       );
