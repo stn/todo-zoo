@@ -1,23 +1,26 @@
 import React, { ChangeEvent, FormEvent, useState } from "react"
-import { useDispatch } from "react-redux"
 
-import { addTask } from "./tasksSlice"
+import { useAddTaskMutation } from "../../app/services/task"
 
 function Form() {
-  const dispatch = useDispatch()
   const [name, setName] = useState("")
+  const [addTask] = useAddTaskMutation()
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setName(e.target.value)
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (name === "") {
       return
     }
-    dispatch(addTask(name))
-    setName("")
+    try {
+      await addTask(name).unwrap()
+      setName("")
+    } catch {
+      throw new Error("An error occurred")
+    }
   }
 
   return (

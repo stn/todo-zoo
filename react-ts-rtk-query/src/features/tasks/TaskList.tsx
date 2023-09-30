@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react"
 
-import { useAppSelector, usePrevious } from "../../app/hooks"
+import { usePrevious } from "../../app/hooks"
 
 import FilterButton from "./FilterButton"
 import TaskListHeading from "./TaskListheading"
 import Todo from "./Todo"
-import { Task } from "./tasksSlice"
+import { Task, useGetTasksQuery } from "../../app/services/task"
 
 const FILTER_MAP: Record<string, (task: Task) => boolean> = {
   All: () => true,
@@ -16,19 +16,39 @@ const FILTER_MAP: Record<string, (task: Task) => boolean> = {
 const FILTER_NAMES = Object.keys(FILTER_MAP)
 
 function TaskList() {
-  const tasks = useAppSelector((state) => state.tasks)
+  // const tasks = useAppSelector((state) => state.tasks)
+  const { data, isError, isLoading } = useGetTasksQuery()
   const [filter, setFilter] = useState("All")
 
-  const taskList = tasks
-    .filter(FILTER_MAP[filter])
-    .map((task) => (
-      <Todo
-        id={task.id}
-        name={task.name}
-        completed={task.completed}
-        key={task.id}
-      />
-    ))
+  const listHeadingRef = useRef<HTMLDivElement>(null)
+  const prevTaskLength = usePrevious(data?.length)
+
+  useEffect(() => {
+    if (prevTaskLength && data && data.length - prevTaskLength === -1) {
+      listHeadingRef.current?.focus()
+    }
+  }, [data, prevTaskLength])
+
+  if (isError) {
+    return <div>Something wrong</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  const taskList = data
+    ? data
+        .filter(FILTER_MAP[filter])
+        .map((task) => (
+          <Todo
+            id={task.id}
+            name={task.name}
+            completed={task.completed}
+            key={task.id}
+          />
+        ))
+    : []
 
   const filterList = FILTER_NAMES.map((name) => (
     <FilterButton
@@ -38,15 +58,6 @@ function TaskList() {
       setFilter={setFilter}
     />
   ))
-
-  const listHeadingRef = useRef<HTMLDivElement>(null)
-  const prevTaskLength = usePrevious(tasks.length)
-
-  useEffect(() => {
-    if (prevTaskLength && tasks.length - prevTaskLength === -1) {
-      listHeadingRef.current?.focus()
-    }
-  }, [tasks.length, prevTaskLength])
 
   return (
     <div>

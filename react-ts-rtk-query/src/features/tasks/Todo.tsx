@@ -5,10 +5,12 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { useDispatch } from "react-redux"
 
 import { usePrevious } from "../../app/hooks"
-import { editTask, deleteTask, toggleTaskCompleted } from "./tasksSlice"
+import {
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} from "../../app/services/task"
 
 interface TodoProps {
   id: string
@@ -17,10 +19,10 @@ interface TodoProps {
 }
 
 export default function Todo({ id, name, completed }: TodoProps) {
-  const dispatch = useDispatch()
-
   const [isEditing, setEditing] = useState(false)
   const [newName, setNewName] = useState("")
+  const [updateTask] = useUpdateTaskMutation()
+  const [deleteTask] = useDeleteTaskMutation()
 
   const wasEditing = usePrevious(isEditing)
 
@@ -40,16 +42,39 @@ export default function Todo({ id, name, completed }: TodoProps) {
     setNewName(e.target.value)
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    dispatch(
-      editTask({
+    try {
+      await updateTask({
         id,
         name: newName,
-      }),
-    )
-    setNewName("")
-    setEditing(false)
+        completed,
+      }).unwrap()
+      setNewName("")
+      setEditing(false)
+    } catch {
+      console.log("An error occurred.")
+    }
+  }
+
+  async function handleToggleCompleted() {
+    try {
+      await updateTask({
+        id,
+        name,
+        completed: !completed,
+      }).unwrap()
+    } catch {
+      console.log("An error occurred.")
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await deleteTask(id).unwrap()
+    } catch {
+      console.log("An error occurred.")
+    }
   }
 
   const editingTemplate = (
@@ -91,7 +116,7 @@ export default function Todo({ id, name, completed }: TodoProps) {
           id={id}
           type="checkbox"
           defaultChecked={completed}
-          onChange={() => dispatch(toggleTaskCompleted(id))}
+          onChange={handleToggleCompleted}
         />
         <label className="todo-label" htmlFor={id}>
           {name}
@@ -109,7 +134,7 @@ export default function Todo({ id, name, completed }: TodoProps) {
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() => dispatch(deleteTask(id))}
+          onClick={handleDelete}
         >
           Delete <span className="visually-hidden">{name}</span>
         </button>
