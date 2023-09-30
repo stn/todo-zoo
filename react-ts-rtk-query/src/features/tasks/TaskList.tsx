@@ -15,19 +15,25 @@ const FILTER_MAP: Record<string, (task: Task) => boolean> = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP)
 
+const EMPTY_TASKS: Task[] = []
+
 function TaskList() {
-  // const tasks = useAppSelector((state) => state.tasks)
-  const { data, isError, isLoading } = useGetTasksQuery()
+  const { tasks, isError, isLoading } = useGetTasksQuery(undefined, {
+    selectFromResult: ({ data, ...results }) => ({
+      tasks: data ?? EMPTY_TASKS,
+      ...results,
+    }),
+  })
   const [filter, setFilter] = useState("All")
 
   const listHeadingRef = useRef<HTMLDivElement>(null)
-  const prevTaskLength = usePrevious(data?.length)
+  const prevTaskLength = usePrevious(tasks.length)
 
   useEffect(() => {
-    if (prevTaskLength && data && data.length - prevTaskLength === -1) {
+    if (prevTaskLength && tasks.length - prevTaskLength === -1) {
       listHeadingRef.current?.focus()
     }
-  }, [data, prevTaskLength])
+  }, [tasks, prevTaskLength])
 
   if (isError) {
     return <div>Something wrong</div>
@@ -37,18 +43,16 @@ function TaskList() {
     return <div>Loading...</div>
   }
 
-  const taskList = data
-    ? data
-        .filter(FILTER_MAP[filter])
-        .map((task) => (
-          <Todo
-            id={task.id}
-            name={task.name}
-            completed={task.completed}
-            key={task.id}
-          />
-        ))
-    : []
+  const taskList = tasks
+    .filter(FILTER_MAP[filter])
+    .map((task) => (
+      <Todo
+        id={task.id}
+        name={task.name}
+        completed={task.completed}
+        key={task.id}
+      />
+    ))
 
   const filterList = FILTER_NAMES.map((name) => (
     <FilterButton
