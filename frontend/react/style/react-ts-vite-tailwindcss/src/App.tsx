@@ -5,8 +5,8 @@ import TaskList from "./features/tasks/TaskList"
 
 function App() {
   return (
-    <div className="todoapp stack-large">
-      <h1>TodoMatic</h1>
+    <div className="container px-4 py-6">
+      <h1 className="text-2xl">TodoMatic</h1>
       <Form />
       <TaskList />
     </div>

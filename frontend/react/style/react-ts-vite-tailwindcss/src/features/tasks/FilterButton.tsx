@@ -10,13 +10,13 @@ function FilterButton({ name, isPressed, setFilter }: FilterButtonProps) {
   return (
     <button
       type="button"
-      className="btn toggle-btn"
+      className="py-2 mx-2 border-2 rounded basis-1/3"
       aria-pressed={isPressed}
       onClick={() => setFilter(name)}
     >
-      <span className="visually-hidden">Show </span>
+      <span className="hidden">Show </span>
       <span>{name}</span>
-      <span className="visually-hidden"> tasks</span>
+      <span className="hidden"> tasks</span>
     </button>
   )
 }

@@ -53,14 +53,14 @@ export default function Todo({ id, name, completed }: TodoProps) {
   }
 
   const editingTemplate = (
-    <form className="stack-small" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label className="todo-label" htmlFor={id}>
+    <form className="" onSubmit={handleSubmit}>
+      <div className="p-2">
+        <label htmlFor={id} className="hidden">
           New name for {name}
         </label>
         <input
           id={id}
-          className="todo-text"
+          className="border rounded shadow grow w-auto"
           type="text"
           value={newName}
           onChange={handleChange}
@@ -70,15 +70,15 @@ export default function Todo({ id, name, completed }: TodoProps) {
       <div className="btn-group">
         <button
           type="button"
-          className="btn todo-cancel"
+          className="p-1 mx-1 border rounded"
           onClick={() => setEditing(false)}
         >
           Cancel
-          <span className="visually-hidden">renaming {name}</span>
+          <span className="hidden">renaming {name}</span>
         </button>
-        <button type="submit" className="btn btn__primary todo-edit">
+        <button type="submit" className="p-1 mx-1 border rounded">
           Save
-          <span className="visually-hidden">new name for {name}</span>
+          <span className="hidden">new name for {name}</span>
         </button>
       </div>
     </form>
@@ -86,36 +86,40 @@ export default function Todo({ id, name, completed }: TodoProps) {
 
   const viewTemplate = (
     <div className="stack-small">
-      <div className="c-cb">
+      <div className="py-1 m-2">
         <input
           id={id}
           type="checkbox"
           defaultChecked={completed}
           onChange={() => dispatch(toggleTaskCompleted(id))}
         />
-        <label className="todo-label" htmlFor={id}>
+        <label className="p-2 m-2" htmlFor={id}>
           {name}
         </label>
       </div>
       <div className="btn-group">
         <button
           type="button"
-          className="btn"
+          className="p-1 mx-1 border rounded"
           onClick={() => setEditing(true)}
           ref={editButtonRef}
         >
-          Edit <span className="visually-hidden">{name}</span>
+          Edit <span className="hidden">{name}</span>
         </button>
         <button
           type="button"
-          className="btn btn__danger"
+          className="p-1 mx-1 border rounded"
           onClick={() => dispatch(deleteTask(id))}
         >
-          Delete <span className="visually-hidden">{name}</span>
+          Delete <span className="hidden">{name}</span>
         </button>
       </div>
     </div>
   )
 
-  return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>
+  return (
+    <li className="py-2 m-2 border shadow">
+      {isEditing ? editingTemplate : viewTemplate}
+    </li>
+  )
 }

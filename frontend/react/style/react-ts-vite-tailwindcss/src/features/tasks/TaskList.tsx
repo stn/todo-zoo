@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { useAppSelector, usePrevious } from "../../app/hooks"
 
 import FilterButton from "./FilterButton"
-import TaskListHeading from "./TaskListheading"
+import TaskListHeading from "./TaskListHeading"
 import Todo from "./Todo"
 import { Task } from "./tasksSlice"
 
@@ -50,14 +50,11 @@ function TaskList() {
 
   return (
     <div>
-      <div className="filters btn-group stack-exception">{filterList}</div>
+      <div className="flex flex-row">{filterList}</div>
       <div tabIndex={-1} ref={listHeadingRef}>
         <TaskListHeading taskList={taskList} />
       </div>
-      <ul
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading"
-      >
+      <ul className="" aria-labelledby="list-heading">
         {taskList}
       </ul>
     </div>
