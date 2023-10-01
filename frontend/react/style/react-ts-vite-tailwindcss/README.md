@@ -1,9 +1,14 @@
 # react-ts-vite-tailwindcss
 
-react/style/react-ts-redux-viteからfork
+## 作業記録
+
+1. react/style/react-ts-redux-viteからfork
 
 ```sh
+> pnpm add -D tailwindcss postcss autoprefixer
+> npx tailwindcss init -p
 ```
+
 
 ## Scripts
 
