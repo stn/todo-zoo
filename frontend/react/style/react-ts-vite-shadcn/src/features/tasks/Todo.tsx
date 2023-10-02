@@ -7,7 +7,12 @@ import React, {
 } from "react"
 import { useDispatch } from "react-redux"
 
-import { usePrevious } from "../../app/hooks"
+import { Button } from "@/components/ui/button"
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+
+import { usePrevious } from "@/app/hooks"
 import { editTask, deleteTask, toggleTaskCompleted } from "./tasksSlice"
 
 interface TodoProps {
@@ -53,73 +58,58 @@ export default function Todo({ id, name, completed }: TodoProps) {
   }
 
   const editingTemplate = (
-    <form className="" onSubmit={handleSubmit}>
-      <div className="p-2">
-        <label htmlFor={id} className="hidden">
-          New name for {name}
-        </label>
-        <input
-          id={id}
-          className="border rounded shadow grow w-auto"
-          type="text"
-          value={newName}
-          onChange={handleChange}
-          ref={editFieldRef}
-        />
-      </div>
-      <div className="btn-group">
-        <button
-          type="button"
-          className="p-1 mx-1 border rounded"
-          onClick={() => setEditing(false)}
-        >
-          Cancel
-          <span className="hidden">renaming {name}</span>
-        </button>
-        <button type="submit" className="p-1 mx-1 border rounded">
-          Save
-          <span className="hidden">new name for {name}</span>
-        </button>
-      </div>
-    </form>
+    <Card>
+      <form onSubmit={handleSubmit}>
+        <CardHeader>
+          <CardTitle>
+            <label htmlFor={id} className="hidden">
+              New name for {name}
+            </label>
+            <Input
+              id={id}
+              className="w-full"
+              value={newName}
+              onChange={handleChange}
+              ref={editFieldRef}
+            />
+          </CardTitle>
+        </CardHeader>
+        <CardFooter className="space-x-2">
+          <Button onClick={() => setEditing(false)}>
+            Cancel
+            <span className="hidden">renaming {name}</span>
+          </Button>
+          <Button type="submit">
+            Save
+            <span className="hidden">new name for {name}</span>
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
   )
 
   const viewTemplate = (
-    <div className="stack-small">
-      <div className="py-1 m-2">
-        <input
-          id={id}
-          type="checkbox"
-          defaultChecked={completed}
-          onChange={() => dispatch(toggleTaskCompleted(id))}
-        />
-        <label className="p-2 m-2" htmlFor={id}>
-          {name}
-        </label>
-      </div>
-      <div className="btn-group">
-        <button
-          type="button"
-          className="p-1 mx-1 border rounded"
-          onClick={() => setEditing(true)}
-          ref={editButtonRef}
-        >
+    <Card>
+      <CardHeader>
+        <CardTitle className="space-x-2">
+          <Checkbox
+            id={id}
+            defaultChecked={completed}
+            onChange={() => dispatch(toggleTaskCompleted(id))}
+          />
+          <label htmlFor={id}>{name}</label>
+        </CardTitle>
+      </CardHeader>
+      <CardFooter className="space-x-2">
+        <Button onClick={() => setEditing(true)} ref={editButtonRef}>
           Edit <span className="hidden">{name}</span>
-        </button>
-        <button
-          type="button"
-          className="p-1 mx-1 border rounded"
-          onClick={() => dispatch(deleteTask(id))}
-        >
+        </Button>
+        <Button onClick={() => dispatch(deleteTask(id))}>
           Delete <span className="hidden">{name}</span>
-        </button>
-      </div>
-    </div>
+        </Button>
+      </CardFooter>
+    </Card>
   )
 
-  return (
-    <li className="py-2 m-2 border shadow">
-      {isEditing ? editingTemplate : viewTemplate}
-    </li>
-  )
+  return <li>{isEditing ? editingTemplate : viewTemplate}</li>
 }

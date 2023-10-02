@@ -50,11 +50,14 @@ function TaskList() {
 
   return (
     <div>
-      <div className="flex flex-row">{filterList}</div>
+      <div className="grid grid-cols-3 gap-4">{filterList}</div>
       <div tabIndex={-1} ref={listHeadingRef}>
         <TaskListHeading taskList={taskList} />
       </div>
-      <ul className="" aria-labelledby="list-heading">
+      <ul
+        className="grid w-full items-center gap-4"
+        aria-labelledby="list-heading"
+      >
         {taskList}
       </ul>
     </div>

@@ -1,40 +1,66 @@
-# react-ts-vite-tailwindcss
+# react-ts-vite-shadcn
 
 ## 作業記録
 
-1. react/style/react-ts-redux-vite から fork
+1. react/style/react-vite-tailwindcss から fork
 
-```sh
-> pnpm add -D tailwindcss postcss autoprefixer
-> npx tailwindcss init -p
-```
+Tailwind CSS に共通の設定は終わっている。
 
-`postcss.config.js`およびに`tailwind.config.js`が作成される。
+2. tsconfig.json
 
-[Vite](https://ja.vitejs.dev/guide/features.html#postcss)は`postcss.config.js`があれば PostCSS を自動的に適用する。
-
-2. tailwind.config.js の設定
-
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+```json
+"baseUrl": ".",
+"paths": {
+  "@/*": ["./src/*"]
 }
 ```
 
-3. `src/index.css`の設定
+3. vite.config.ts
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+```shell
+pnpm add -D @types/node
 ```
 
-4. build を確認
+vite.config.ts
+
+```ts
+import path from "path"
+import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite"
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+})
+```
+
+4. components.json
+
+```shell
+> npx shadcn-ui@latest init
+
+Would you like to use TypeScript (recommended)? no / yes
+Which style would you like to use? › Default
+Which color would you like to use as base color? › Slate
+Where is your global CSS file? › › src/index.css
+Do you want to use CSS variables for colors? › no / yes
+Where is your tailwind.config.js located? › tailwind.config.js
+Configure the import alias for components: › @/components
+Configure the import alias for utils: › @/lib/utils
+Are you using React Server Components? › no / yes (no)
+```
+
+5. component の追加
+
+```shell
+> npx shadcn-ui@latest add button
+```
+
+6. build を確認
 
 ```shell
 > pnpm dev
@@ -49,4 +75,4 @@ export default {
 
 ## 参考
 
-- [Install Tailwind CSS with Vite - Tailwind CSS](https://tailwindcss.com/docs/guides/vite)
+- [Vite - shadcn/ui](https://ui.shadcn.com/docs/installation/vite)

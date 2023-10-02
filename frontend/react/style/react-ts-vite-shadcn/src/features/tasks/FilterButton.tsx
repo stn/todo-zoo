@@ -1,5 +1,7 @@
 import React from "react"
 
+import { Button } from "@/components/ui/button"
+
 interface FilterButtonProps {
   name: string
   isPressed: boolean
@@ -7,17 +9,17 @@ interface FilterButtonProps {
 }
 
 function FilterButton({ name, isPressed, setFilter }: FilterButtonProps) {
+  const variant = isPressed ? "outline" : "secondary"
   return (
-    <button
-      type="button"
-      className="py-2 mx-2 border-2 rounded basis-1/3"
+    <Button
+      variant={variant}
       aria-pressed={isPressed}
       onClick={() => setFilter(name)}
     >
       <span className="hidden">Show </span>
       <span>{name}</span>
       <span className="hidden"> tasks</span>
-    </button>
+    </Button>
   )
 }
 
