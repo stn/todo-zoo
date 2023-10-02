@@ -53,30 +53,30 @@ export default function Todo({ id, name, completed }: TodoProps) {
   }
 
   const editingTemplate = (
-    <form className="" onSubmit={handleSubmit}>
-      <div className="p-2">
+    <form className="card-body" onSubmit={handleSubmit}>
+      <div className="card-title">
         <label htmlFor={id} className="hidden">
           New name for {name}
         </label>
         <input
           id={id}
-          className="border rounded shadow grow w-auto"
+          className="input input-bordered w-full"
           type="text"
           value={newName}
           onChange={handleChange}
           ref={editFieldRef}
         />
       </div>
-      <div className="btn-group">
+      <div className="card-actions justify-end">
         <button
           type="button"
-          className="p-1 mx-1 border rounded"
+          className="badge badge-outline"
           onClick={() => setEditing(false)}
         >
           Cancel
           <span className="hidden">renaming {name}</span>
         </button>
-        <button type="submit" className="p-1 mx-1 border rounded">
+        <button type="submit" className="badge badge-outline">
           Save
           <span className="hidden">new name for {name}</span>
         </button>
@@ -85,22 +85,21 @@ export default function Todo({ id, name, completed }: TodoProps) {
   )
 
   const viewTemplate = (
-    <div className="stack-small">
-      <div className="py-1 m-2">
+    <div className="card-body">
+      <div className="card-title">
         <input
           id={id}
           type="checkbox"
+          className="checkbox"
           defaultChecked={completed}
           onChange={() => dispatch(toggleTaskCompleted(id))}
         />
-        <label className="p-2 m-2" htmlFor={id}>
-          {name}
-        </label>
+        <label htmlFor={id}>{name}</label>
       </div>
-      <div className="btn-group">
+      <div className="card-actions justify-end">
         <button
           type="button"
-          className="p-1 mx-1 border rounded"
+          className="badge badge-outline"
           onClick={() => setEditing(true)}
           ref={editButtonRef}
         >
@@ -108,7 +107,7 @@ export default function Todo({ id, name, completed }: TodoProps) {
         </button>
         <button
           type="button"
-          className="p-1 mx-1 border rounded"
+          className="badge badge-outline"
           onClick={() => dispatch(deleteTask(id))}
         >
           Delete <span className="hidden">{name}</span>
@@ -118,7 +117,7 @@ export default function Todo({ id, name, completed }: TodoProps) {
   )
 
   return (
-    <li className="py-2 m-2 border shadow">
+    <li className="card card-compact card-bordered">
       {isEditing ? editingTemplate : viewTemplate}
     </li>
   )

@@ -49,12 +49,12 @@ function TaskList() {
   }, [tasks.length, prevTaskLength])
 
   return (
-    <div>
-      <div className="flex flex-row">{filterList}</div>
+    <div className="container my-4 space-y-4">
+      <div className="tabs tabs-boxed justify-evenly">{filterList}</div>
       <div tabIndex={-1} ref={listHeadingRef}>
         <TaskListHeading taskList={taskList} />
       </div>
-      <ul className="" aria-labelledby="list-heading">
+      <ul aria-labelledby="list-heading" className="space-y-4">
         {taskList}
       </ul>
     </div>

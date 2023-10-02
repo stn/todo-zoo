@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 
 interface FilterButtonProps {
   name: string
@@ -9,8 +9,7 @@ interface FilterButtonProps {
 function FilterButton({ name, isPressed, setFilter }: FilterButtonProps) {
   return (
     <button
-      type="button"
-      className="py-2 mx-2 border-2 rounded basis-1/3"
+      className={isPressed ? "tab tab-active" : "tab"}
       aria-pressed={isPressed}
       onClick={() => setFilter(name)}
     >
