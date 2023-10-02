@@ -1,40 +1,23 @@
-# react-ts-vite-tailwindcss
+# react-ts-vite-daisyui
 
 ## 作業記録
 
-1. react/style/react-ts-redux-vite から fork
+1. react/style/react-ts-tailwindcss から fork
 
 ```sh
-> pnpm add -D tailwindcss postcss autoprefixer
-> npx tailwindcss init -p
+> pnpm add -D daisyui@latest
 ```
-
-`postcss.config.js`およびに`tailwind.config.js`が作成される。
-
-[Vite](https://ja.vitejs.dev/guide/features.html#postcss)は`postcss.config.js`があれば PostCSS を自動的に適用する。
 
 2. tailwind.config.js の設定
 
 ```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+module.exports = {
+  //...
+  plugins: [require("daisyui")],
 }
 ```
 
-3. `src/index.css`の設定
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-4. build を確認
+3. 動作を確認
 
 ```shell
 > pnpm dev
@@ -49,4 +32,4 @@ export default {
 
 ## 参考
 
-- [Install Tailwind CSS with Vite - Tailwind CSS](https://tailwindcss.com/docs/guides/vite)
+- [Install daisyUI as a Tailwind CSS plugin — Tailwind CSS Components](https://daisyui.com/docs/install/)
